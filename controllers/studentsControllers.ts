@@ -6,7 +6,8 @@ class studentsControllers {
     }
 
     consultById(req, res) {
-        res.json({ msg: 'students consult by id'});
+        const { id } = req.params;
+        res.json({ msg: `students consult by id: ${id}`});
     }
 
 
