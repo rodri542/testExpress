@@ -1,22 +1,20 @@
-import express from 'express';
-import cors from 'cors';
-import morgan from 'morgan';
+import app from './app';
+import { AppDataSource } from './db/connection';
 
-const app = express();
-app.use(morgan('dev'));
-app.use(cors());
+async function main() {
+  try {
+    console.log('Initializing database connection...');
+    const connection = await AppDataSource.initialize();
+    console.log('Database connected:', connection.isInitialized);
 
-import studentsRoutes from './routes/studentsRoutes';
-import professorRoutes from './routes/professorRoutes';
+    app.listen(6500, () => {
+      console.log('Server is running on port 6500');
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error('Error during Data Source initialization:', error.message);
+    }
+  }
+}
 
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
-
-app.use('/students', studentsRoutes);
-app.use('/professors', professorRoutes);
-
-app.listen(6500, () => {
-  console.log('Server is running on port 6500');
-});
-
+main();

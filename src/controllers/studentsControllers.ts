@@ -1,4 +1,3 @@
-import { testConnection } from '../database/connection';
 import { Request, Response } from 'express';
 
 class studentsControllers {
@@ -6,7 +5,6 @@ class studentsControllers {
 
   async consult(req: Request, res: Response) {
     try {
-      await testConnection();
       res.json({ msg: 'students consult' });
     } catch (err) {
       console.error('DB check failed in consult:', err);
