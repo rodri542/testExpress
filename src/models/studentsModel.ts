@@ -2,24 +2,24 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 
 @Entity()
 export class Student {
-    @PrimaryGeneratedColumn()
-    id!: number;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @Column()
-    dni!: string;
+  @Column()
+  dni!: string;
 
-    @Column()
-    name!: string;
+  @Column()
+  name!: string;
 
-    @Column()
-    lastname!: string;
+  @Column()
+  lastname!: string;
 
-    @Column()
-    age!: number;
-    
-    @CreateDateColumn()
-    createdAt!: Date;
-    
-    @UpdateDateColumn()
-    updatedAt!: Date;
+  @Column()
+  age!: number;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }

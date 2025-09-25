@@ -2,7 +2,6 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 
 @Entity('professors')
 export class Professor {
-
   @PrimaryGeneratedColumn()
   id!: number;
 
