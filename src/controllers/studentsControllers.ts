@@ -16,20 +16,44 @@ class studentsControllers {
   }
 
   consultById(req: Request, res: Response) {
-    const { id } = req.params;
-    res.json({ msg: `students consult by id: ${id}` });
+    try {
+      const { id } = req.params;
+      res.json({ msg: `students consult by id: ${id}` });
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(500).json({ msg: error.message });
+      }
+    }
   }
 
   create(req: Request, res: Response) {
-    res.json({ msg: 'students created' });
+    try {
+      res.json({ msg: 'students created' });
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(500).json({ msg: error.message });
+      }
+    }
   }
 
   update(req: Request, res: Response) {
-    res.json({ msg: 'students updated' });
+    try {
+      res.json({ msg: 'students updated' });
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(500).json({ msg: error.message });
+      }
+    }
   }
 
   delete(req: Request, res: Response) {
-    res.json({ msg: 'students deleted' });
+    try {
+      res.json({ msg: 'students deleted' });
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(500).json({ msg: error.message });
+      }
+    }
   }
 }
 export const studentsController = new studentsControllers();
