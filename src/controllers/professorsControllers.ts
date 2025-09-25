@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
+import { Professor } from '../models/professorsModel';
 
 class professorsController {
   constructor() {}
 
-  consult(req: Request, res: Response) {
+  async consult(res: Response) {
     try {
-      res.json({ msg: 'professors consult' });
+      const professors = await Professor.find();
+
+      res.status(200).send({ msg: professors });
     } catch (error) {
       if (error instanceof Error) {
         res.status(500).json({ msg: error.message });
@@ -13,42 +16,71 @@ class professorsController {
     }
   }
 
-  consultById(req: Request, res: Response) {
+  async consultById(req: Request, res: Response) {
     try {
-      res.json({ msg: 'professor consult by id' });
+      const { id } = req.params;
+      if (!id) return res.status(400).send({ msg: 'No id provided' });
+
+      const professor = await Professor.findOneBy({ id: parseInt(id) });
+
+      res.status(200).send({ msg: professor });
     } catch (error) {
       if (error instanceof Error) {
-        res.status(500).json({ msg: error.message });
+        res.status(500).send({ msg: error.message });
       }
     }
   }
 
-  create(req: Request, res: Response) {
+  async create(req: Request, res: Response) {
     try {
-      res.json({ msg: 'professor created' });
+      const { body } = req;
+      if (!body) return res.status(400).send({ msg: 'No data provided' });
+
+      const createdProfessor = await Professor.create({
+        dni: body?.dni,
+        name: body?.name,
+        lastname: body?.lastname,
+        age: body?.age,
+        phone: body?.phone,
+        profession: body?.profession,
+      });
+
+      await createdProfessor.save();
+
+      res.status(201).send({ msg: 'professor created', professor: createdProfessor });
     } catch (error) {
       if (error instanceof Error) {
-        res.status(500).json({ msg: error.message });
+        res.status(500).send({ msg: error.message });
       }
     }
   }
 
-  update(req: Request, res: Response) {
+  async update(req: Request, res: Response) {
     try {
-      res.json({ msg: 'professor updated' });
+      const { id } = req.params;
+      if (!req.body || !id) return res.status(400).send({ msg: 'No data provided' });
+
+      const updatedProfessor = await Professor.update({ id: parseInt(id) }, { ...req.body });
+
+      res.status(200).send({ msg: updatedProfessor });
     } catch (error) {
       if (error instanceof Error) {
-        res.status(500).json({ msg: error.message });
+        res.status(500).send({ msg: error.message });
       }
     }
   }
 
-  delete(req: Request, res: Response) {
+  async delete(req: Request, res: Response) {
     try {
-      res.json({ msg: 'professor deleted' });
+      const { id } = req.params;
+      if (!id) return res.status(400).send({ msg: 'No id provided' });
+
+      const deletedProfessor = await Professor.delete({ id: parseInt(id) });
+
+      res.status(200).send({ msg: 'professor deleted', professor: deletedProfessor.affected });
     } catch (error) {
       if (error instanceof Error) {
-        res.status(500).json({ msg: error.message });
+        res.status(500).send({ msg: error.message });
       }
     }
   }

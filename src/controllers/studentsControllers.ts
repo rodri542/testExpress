@@ -1,52 +1,78 @@
 import { Request, Response } from 'express';
+import { Student } from '../models/studentsModel';
 
 class studentsControllers {
   constructor() {}
 
   async consult(req: Request, res: Response) {
     try {
-      res.json({ msg: 'students consult' });
-    } catch (err) {
-      console.error('DB check failed in consult:', err);
+      const students = await Student.find();
 
-      res.status(500).json({ error: 'Database connection failed' });
+      res.status(200).send({ msg: students });
+    } catch {
+      res.status(500).send({ error: "Couldn't retrieve students" });
     }
   }
 
-  consultById(req: Request, res: Response) {
+  async consultById(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      res.json({ msg: `students consult by id: ${id}` });
+      if (!id) return res.status(400).send({ msg: 'No id provided' });
+
+      const student = await Student.findOneBy({ id: parseInt(id) });
+
+      res.status(200).send({ msg: student });
     } catch (error) {
       if (error instanceof Error) {
-        res.status(500).json({ msg: error.message });
+        res.status(500).send({ msg: error.message });
       }
     }
   }
 
-  create(req: Request, res: Response) {
+  async create(req: Request, res: Response) {
     try {
-      res.json({ msg: 'students created' });
+      const { body } = req;
+      if (!body) return res.status(400).send({ msg: 'No data provided' });
+
+      const createdStudent = await Student.create({
+        dni: body?.dni,
+        name: body?.name,
+        lastname: body?.lastname,
+        age: body?.age,
+      });
+
+      await createdStudent.save();
+
+      res.status(201).send({ msg: 'students created', student: createdStudent });
     } catch (error) {
       if (error instanceof Error) {
-        res.status(500).json({ msg: error.message });
+        res.status(500).send({ msg: error.message });
       }
     }
   }
 
-  update(req: Request, res: Response) {
+  async update(req: Request, res: Response) {
     try {
-      res.json({ msg: 'students updated' });
+      const { id } = req.params;
+      if (!req.body || !id) return res.status(400).send({ msg: 'No data provided' });
+
+      const updatedStudent = await Student.update({ id: parseInt(id) }, { ...req.body });
+
+      res.status(200).send({ msg: updatedStudent });
     } catch (error) {
       if (error instanceof Error) {
-        res.status(500).json({ msg: error.message });
+        res.status(500).send({ msg: error.message });
       }
     }
   }
 
-  delete(req: Request, res: Response) {
+  async delete(req: Request, res: Response) {
     try {
-      res.json({ msg: 'students deleted' });
+      const { id } = req.params;
+      if (!id) return res.status(400).send({ msg: 'No id provided' });
+      const deletedStudent = await Student.delete({ id: parseInt(id) });
+
+      res.status(200).send({ msg: 'student deleted', student: deletedStudent.affected });
     } catch (error) {
       if (error instanceof Error) {
         res.status(500).json({ msg: error.message });

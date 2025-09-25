@@ -1,7 +1,16 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Course } from './courseModel';
 
 @Entity('professors')
-export class Professor {
+export class Professor extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -22,6 +31,9 @@ export class Professor {
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   profession!: string;
+
+  @OneToMany(() => Course, course => course.professor)
+  courses!: Course[];
 
   @CreateDateColumn()
   createdAt!: Date;

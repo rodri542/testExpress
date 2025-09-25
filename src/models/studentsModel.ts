@@ -1,20 +1,27 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
-@Entity()
-export class Student {
+@Entity('students')
+export class Student extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 20, unique: true })
   dni!: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 100 })
   name!: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 100 })
   lastname!: string;
 
-  @Column()
+  @Column({ type: 'int' })
   age!: number;
 
   @CreateDateColumn()
