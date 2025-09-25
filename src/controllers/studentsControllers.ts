@@ -4,7 +4,7 @@ import { Student } from '../models/studentsModel';
 class studentsControllers {
   constructor() {}
 
-  async consult(res: Response) {
+  async consult(req: Request, res: Response) {
     try {
       const students = await Student.find();
       console.log(students);
@@ -33,6 +33,8 @@ class studentsControllers {
   async create(req: Request, res: Response) {
     try {
       const { body } = req;
+      console.log(body);
+
       if (!body) return res.status(400).send({ msg: 'No data provided' });
 
       const createdStudent = await Student.create({
@@ -57,9 +59,9 @@ class studentsControllers {
       const { id } = req.params;
       if (!req.body || !id) return res.status(400).send({ msg: 'No data provided' });
 
-      const updatedStudent = await Student.update({ id: parseInt(id) }, { ...req.body });
+      await Student.update({ id: parseInt(id) }, { ...req.body });
 
-      res.status(200).send({ msg: updatedStudent });
+      res.status(200).send({ msg: 'student updated' });
     } catch (error) {
       if (error instanceof Error) {
         res.status(500).send({ msg: error.message });

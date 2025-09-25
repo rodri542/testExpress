@@ -6,7 +6,7 @@ import { Student } from '../models/studentsModel';
 class coursesControllers {
   constructor() {}
 
-  async consult(res: Response) {
+  async consult(req: Request, res: Response) {
     try {
       const courses = await Course.find({ relations: { professor: true, students: true } });
 
@@ -47,8 +47,11 @@ class coursesControllers {
         description: body?.description,
         professor: body?.idProfessor,
       });
+      await course.save();
+
       res.status(201).send({ msg: course });
     } catch (error) {
+      console.log('something went wrong');
       if (error instanceof Error) {
         res.status(500).send({ msg: error.message });
       }
@@ -70,7 +73,10 @@ class coursesControllers {
       const course = await Course.findOneBy({ id: parseInt(id) });
       if (!course) return res.status(404).send({ msg: 'Course not found' });
 
-      await Course.update({ id: parseInt(id) }, { ...body });
+      await Course.update(
+        { id: parseInt(id) },
+        { name: body?.name, description: body?.description, professor: idProfessor },
+      );
       res.status(200).send({ msg: 'Course updated' });
     } catch (error) {
       if (error instanceof Error) {
@@ -98,6 +104,7 @@ class coursesControllers {
 
   async addStudent(req: Request, res: Response) {
     try {
+      console.log(req.params);
       const { courseId, studentId } = req.params;
       if (!courseId || !studentId)
         return res.status(400).send({ msg: 'courseId and studentId are required' });

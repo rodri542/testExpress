@@ -4,7 +4,7 @@ import { Professor } from '../models/professorsModel';
 class professorsController {
   constructor() {}
 
-  async consult(res: Response) {
+  async consult(req: Request, res: Response) {
     try {
       const professors = await Professor.find();
 
@@ -34,6 +34,7 @@ class professorsController {
   async create(req: Request, res: Response) {
     try {
       const { body } = req;
+      console.log(body);
       if (!body) return res.status(400).send({ msg: 'No data provided' });
 
       const createdProfessor = await Professor.create({
@@ -60,9 +61,9 @@ class professorsController {
       const { id } = req.params;
       if (!req.body || !id) return res.status(400).send({ msg: 'No data provided' });
 
-      const updatedProfessor = await Professor.update({ id: parseInt(id) }, { ...req.body });
+      await Professor.update({ id: parseInt(id) }, { ...req.body });
 
-      res.status(200).send({ msg: updatedProfessor });
+      res.status(200).send({ msg: 'professor updated' });
     } catch (error) {
       if (error instanceof Error) {
         res.status(500).send({ msg: error.message });

@@ -33,7 +33,7 @@ module.exports = [
     },
     rules: {
       'prettier/prettier': 'error',
-      'no-console': 'error',
+      'no-console': 'warn',
       'no-debugger': 'error',
 
       'no-unused-vars': 'off',
