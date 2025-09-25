@@ -4,11 +4,12 @@ import { Student } from '../models/studentsModel';
 class studentsControllers {
   constructor() {}
 
-  async consult(req: Request, res: Response) {
+  async consult(res: Response) {
     try {
       const students = await Student.find();
+      console.log(students);
 
-      res.status(200).send({ msg: students });
+      res.status(200).send({ msg: students, total: students.length });
     } catch {
       res.status(500).send({ error: "Couldn't retrieve students" });
     }

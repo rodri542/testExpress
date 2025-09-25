@@ -17,4 +17,3 @@ app.use('/students', studentsRoutes);
 app.use('/professors', professorRoutes);
 
 export default app;
-
