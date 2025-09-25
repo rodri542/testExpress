@@ -7,7 +7,9 @@
     "esModuleInterop": true,
     "moduleResolution": "nodenext",
     "strict": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"]
